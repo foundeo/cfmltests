@@ -24,7 +24,7 @@ component extends="testbox.system.BaseSpec" {
 			baseURL = baseURL & ":" & cgi.server_port;
 		}
 		baseURL = baseURL & getDirectoryFromPath(cgi.script_name) & "apps/";
-		local.result = cfHttp.run({url=arguments.uri});
+		local.result = cfHttp.run({url=baseURL & arguments.uri});
 		return local.result.fileContent;
 	}
 }
