@@ -65,6 +65,12 @@ component extends="tests.Base" {
 				
 			});
 
+			describe("Bug Expectations", function() {
+				it("Should allow U+ in a string, bug ## 3941059", function() {
+					var input= "xU+a600x";
+					expect(SerializeJSON(input)).toBe("xU+a600x");
+				});
+			});
 
 
 	}
