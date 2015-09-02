@@ -38,6 +38,20 @@ component extends="tests.Base" {
 					expect(SerializeJSON(x)).toBe("{""f"":true}");
 				});
 
+				it("Should not convert No to false when serializing a CFC Bug ##3845642 and ##3952968", function() {
+					var bean = new apps.serializejson.bean();
+					bean.title = "Doctor";
+					bean.surname = "No";
+					expect(SerializeJSON(bean)).toBe("{""SURNAME"":""No"",""TITLE"":""Doctor""}");
+				});
+
+				it("Should not convert Yes to true when serializing a CFC Bug ##3845642 and ##3952968", function() {
+					var bean = new apps.serializejson.bean();
+					bean.title = "Doctor";
+					bean.surname = "Yes";
+					expect(SerializeJSON(bean)).toBe("{""SURNAME"":""Yes"",""TITLE"":""Doctor""}");
+				});
+
 				it("Should not convert Yes to true", function() {
 					var x = {"f"="Yes"};
 					expect(SerializeJSON(x)).toBe("{""f"":""Yes""}");
@@ -70,6 +84,8 @@ component extends="tests.Base" {
 					var input= "xU+a600x";
 					expect(SerializeJSON(input)).toBe("xU+a600x");
 				});
+
+
 			});
 
 

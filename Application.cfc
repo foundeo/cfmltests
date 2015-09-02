@@ -6,6 +6,7 @@ component {
 	this.mappings["/testbox"] = this.projectRoot & "testbox"; 
 	this.mappings["/tests"] = this.projectRoot & "tests"; 
 	this.mappings["/util"] = this.projectRoot & "tests"; 
+	this.mappings["/apps"] = this.projectRoot & "apps"; 
 
 	/*
 		The following application settings that may change test results
