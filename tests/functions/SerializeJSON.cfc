@@ -61,6 +61,12 @@ component extends="tests.Base" {
 					var x = {"f"="No"};
 					expect(SerializeJSON(x)).toBe("{""f"":""No""}");
 				});
+
+				//this is a trick that some people are using to get around auto boolean conversion bugs
+				it("Should keep No if we prefix with Chr(2)", function() {
+					var x = {"f"=Chr(2)&"No"};
+					expect(SerializeJSON(x)).toBe("{""f"":""No""}");
+				});
 				
 			});
 
