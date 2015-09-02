@@ -21,7 +21,7 @@ component extends="testbox.system.BaseSpec" {
 		var cfHttp = new util.cfhttp();
 		var baseURL = "http://" & cgi.server_name;
 		if (cgi.server_port IS NOT 80) {
-			baseURL = baseURL & ":" cgi.server_port;
+			baseURL = baseURL & ":" & cgi.server_port;
 		}
 		baseURL = baseURL & getDirectoryFromPath(cgi.script_name) & "apps/";
 		local.result = cfHttp.run({url=arguments.uri});
