@@ -92,7 +92,7 @@ component extends="tests.Base" {
 				describe("CF11+ Expectations", function() {
 					it("Should preserver key case when this.serialization.preserveCaseForStructKey=true on CF11+", function() {
 						var result = appRequest("serializejson/test.cfm");
-						expect(result).toBe("{""mixedCase"":""c"",""UPPER"":""b"",""lower"":""a""}");
+						expect(result).toBe("{""mixedCase"":""c"",""lower"":""a"",""UPPER"":""b""}");
 					});
 				});
 			}
