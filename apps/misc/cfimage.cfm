@@ -1,0 +1,4 @@
+<cfset myImg = ImageNew("", 200, 100, "rgb", "white")>
+<cfset ImageSetDrawingColor(myImg, "blue")>
+<cfset ImageDrawRect(myImg, 0, 0, 50, 25, true)>
+<cfimage action="writeToBrowser" source="#myImg#">

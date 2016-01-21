@@ -1,0 +1,45 @@
+<p>Here is an interesting vulnerability that I have come across several times in real CFML code during code reviews, I have spoken about it at conferences but have never written about it. Since it doesn't really have a name, I call it <em>Scope Injection</em>, you'll see why in a minute.</p>
+<p>We have the following code:</p>
+<pre>
+&lt;cfif session.isAdmin&gt;
+    Do something only an admin can do...
+&lt;/cfif&gt;
+</pre>
+<p>Now lets suppose that this <code>session.isAdmin</code> is set upon a successful authentication, but for unauthenticated sessions <code>isAdmin</code> is <em>undefined</em> in the <code>session</code> scope (onSessionStart does not initialize it).</p>
+<p>Now suppose a request to the above code like this:</p>
+<pre>/admin/something.cfm?<strong>session.isAdmin=1</strong></pre>
+<p>What happens when the above code example is run:</p>
+<ul>
+   <li>CF checks to see if <code>session.isAdmin</code> is defined in the <code>session</code> scope</li>
+   <li>The variable <code>session.isAdmin</code> was not defined in the <code>session</code> scope, so it starts searching other scopes, such as the <code>url</code> scope.</li>
+  <li>CF finds <code>url.session.isAdmin</code> defined and uses that value to evaluate the if statement as <code>true</code>.</li>
+  <li>Code that should only be executed by an admin can actually be executed by anyone.</li>
+</ul>
+<p><strong>Mitigating Scope Injection in CFML</strong></p>
+<p>To mitigate this, you should make sure that variables are initialized properly, a good place to do this is in your Application.cfc event lifecycle methods, <code>onSessionStart</code> for session scoped variables, <code>onApplicationStart</code> for application scoped variables, <code>onRequestStart</code> for request scope variables, etc.</p>
+<p>You can also use <code>StructKeyExists</code> to make sure the variable is defined:</p>
+<pre>
+&lt;cfif StructKeyExists(session, "isAdmin") AND session.isAdmin&gt;
+  do admin stuff
+&lt;/cfif&gt;
+</pre>
+<p><strong>Scope Injection in Railo / Lucee</strong></p>
+<p>This particular example is not vulnerable in the version of Railo / Lucee I tested, apparently because it does not allow cascading on builtin scopes. You can still have a scope injection issue on variables that are not in a builtin scope, consider this:</p>
+<pre>
+&lt;cfif IsUserInRole("admin") OR IsUserInRole("superuser")&gt;
+   &lt;cfset isAdmin = true&gt;
+&lt;/cfif&gt;
+&lt;cfif isAdmin&gt;
+  do admin stuff
+&lt;/cfif&gt;
+</pre>
+
+<p>There is also a setting in the Railo / Lucee administrator that allows you to turn off cascading (under scopes) by setting it to <code>strict</code>. You can also do this in your <code>Application.cfc</code>:</p>
+<pre>this.scopeCascading = "strict";</pre>
+<p><strong>How FuseGuard protects from Scope Injection</strong></p>
+<p><a href="https://foundeo.com/security/">FuseGuard</a> customers have been enjoying protection from scope injection for the past 3 years. It operates in a strict mode by default which prevents inputs like <code>url.one.two</code>, with strict mode off it only looks at valid scope names (like session, application, etc).</p>
+<p>As of version 2.3 you can also set a prefix to ignore, for example fusebox apps commonly have url's like <code>?fusebox.action=foo</code> so you can tell FuseGuard to allow that by adding:</p>
+<pre>filter.setIgnorePrefixList("fusebox");</pre>
+<p>You can also ignore a variable a-la-carte like this:</p>
+<pre>filter.ignoreVariable("url", "one.two");</pre>
+

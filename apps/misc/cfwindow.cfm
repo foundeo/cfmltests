@@ -1,0 +1,1 @@
+<cfwindow title="Test Window" name="myWindow" width="200" height="200" initShow="true" source="/"></cfwindow>

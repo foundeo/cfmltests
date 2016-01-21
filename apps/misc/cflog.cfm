@@ -1,0 +1,1 @@
+<cflog text="test from cflog">

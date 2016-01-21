@@ -19,6 +19,12 @@ component extends="tests.Base" {
 				expect(result.statuscode).toInclude("403");
 			});
 
+			it("Should connect to https://maps.googleapis.com/robots.txt", function() {
+				var result = cfHttp.run("https://maps.googleapis.com/robots.txt");
+				expect(result.fileContent).toInclude("Disallow:");
+				
+			});
+
 			
 		});
 
