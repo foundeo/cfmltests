@@ -8,4 +8,11 @@
 	<cffunction name="onApplicationStart">
 		<cfset getPageContext().getRequest().getServletContext().log("onApplicationStart")>
 	</cffunction>
+
+	<cffunction name="onError" output="true">
+		<cfargument name="exception">
+		<cfargument name="eventName">
+		<cfoutput><h1>Application.cfc::onError</h1></cfoutput>
+		<cfdump var="#arguments#">
+	</cffunction>
 </cfcomponent>
