@@ -20,12 +20,18 @@ component extends="tests.Base" {
 			});
 
 			it("Should connect to https://maps.googleapis.com/robots.txt", function() {
-				var result = cfHttp.run("https://maps.googleapis.com/robots.txt");
+				var result = cfHttp.run({url="https://maps.googleapis.com/robots.txt"});
 				expect(result.fileContent).toInclude("Disallow:");
-				
 			});
 
 			
+		});
+
+		describe("CFHTTP Should Support Various HTTP Methods", function() {
+			it("Should support PATCH method Bug ##3043855 fixed CF11u3", function() {
+				var result = cfHttp.run({url="http://httpbin.org/patch", method="PATCH", throwonerror=true});
+				expect(result.statuscode).toInclude("200");
+			});
 		});
 
 	}
