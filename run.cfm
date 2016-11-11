@@ -25,6 +25,11 @@
 
 <cfset r = new testbox.system.TestBox( directory="tests", reporter=url.reporter ) >
 <cfoutput>#r.run()#</cfoutput>
+<cfset resultObject = r.getResult()>
+<cfset errors       = resultObject.getTotalFail() + resultObject.getTotalError()>
+<cfif errors GT 0>
+	<cfheader statuscode="500" statustext="Tests Failed">
+</cfif>
 
 <cfif NOT plainText>
 	<cfoutput>
